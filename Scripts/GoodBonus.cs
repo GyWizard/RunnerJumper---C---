@@ -8,11 +8,11 @@ namespace RunnerJumper
     public class GoodBonus : InteractiveObject,ICollect,IDisplay
     {
 
-        public void Collect()
+        public void Collect() //  Выключаем объект после соприкосновения
         {
             gameObject.SetActive(false);
         }
-        public void Display()
+        public void Display() //  Выводим имя объекта в консоль
         {
             Log($"Collected! {this.gameObject.name}");
         }

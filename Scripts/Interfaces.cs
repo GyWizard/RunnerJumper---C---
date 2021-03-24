@@ -1,25 +1,25 @@
 ﻿namespace  RunnerJumper
 { 
-    interface IFlay
+    interface IFlay // Летать туда сюда
     {
         void Fly();
     }
 
-    interface ICollect
+    interface ICollect // Поднятие объекта
     {
         void Collect();
     }
 
-    interface IDamage
+    interface IDamage // Нанесения урона
     {
         void Damage();
     }
 
-    interface IDisplay
+    interface IDisplay //  Отображения
     {
         void Display();
     }
-    interface IInteract
+    interface IInteract // Взаимодействие
     {
         void Interact();
     }

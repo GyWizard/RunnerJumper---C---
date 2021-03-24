@@ -21,47 +21,47 @@ namespace RunnerJumper
 
         void Awake()
         {
-            _controller = new InputController();
-            _movement = new Movement(_runSpeed,_jumpForce,_player);
-            _cameraMove = new CameraMove(_player.transform,_camera);
-            _listInteractiveObjects = FindObjectsOfType<InteractiveObject>();
+            _controller = new InputController(); // создаем менеджер Ввода
+            _movement = new Movement(_runSpeed,_jumpForce,_player); // создаем менеджер Движения игрока
+            _cameraMove = new CameraMove(_player.transform,_camera); //  создаем менеджер Движения камеры
+            _listInteractiveObjects = FindObjectsOfType<InteractiveObject>(); // добавляем все интерактивные объекты в массив
         }
 
 
         void Update()
         {
-            PlayerMovement();
-            InteractiveObjects();
+            PlayerMovement(); // Перемещаем игрока
+            InteractiveObjects(); // Взаимодействия с интерактивными объектами
         }
 
-        void FixedUpdate()
+        void FixedUpdate() 
         {
-            if(_controller.Action)
+            if(_controller.Action) //Если нажата кнопка действия совершаем прыжок
             {
                 _movement.Jump();
                 _controller.Action = false;
             }
         }
 
-        void LateUpdate ()
+        void LateUpdate () 
         {
-            _cameraMove.Move();
+            _cameraMove.Move(); // обновляем камеру
         }
 
-        void PlayerMovement()
+        void PlayerMovement() 
         {
-            _movement.Run();
-            _controller.CheckActionPressed();    
+            _movement.Run(); //выполняем бег с заданной скоростью
+            _controller.CheckActionPressed(); // проверяем кнопку прыжка
         }
 
-        void InteractiveObjects()
+        void InteractiveObjects() 
         {
-            foreach(InteractiveObject io in _listInteractiveObjects)
+            foreach(InteractiveObject io in _listInteractiveObjects) // Пробегаем по интерактивным объектам
             {
-                if(io is IFlay flay)
+                if(io is IFlay flay) 
                 {
 
-                    flay.Fly();
+                    flay.Fly(); // Если есть интерфейс IFlay то летаем.
                 }
             }
         }

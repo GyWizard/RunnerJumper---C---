@@ -5,7 +5,7 @@
     {
         public void Restart()
         {
-            SceneManager.LoadScene( SceneManager.GetActiveScene().buildIndex);
+            SceneManager.LoadScene( SceneManager.GetActiveScene().buildIndex); // Перезапускаем сцену
         }
     }
 

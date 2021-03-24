@@ -11,7 +11,7 @@ public abstract class InteractiveObject : MonoBehaviour
     {
         if(other.CompareTag("Player"))
         {
-           Interact(); 
+           Interact();  // Взаимодействую при соприкосновении с игроком
         }
     }
 
