@@ -2,7 +2,7 @@
 
 namespace RunnerJumper
 {
-    public class Key : GoodBonus,IFlay
+    public sealed class Key : GoodBonus,IFlay
     {
         [SerializeField] private float _lengthFlay;
         private Vector2 _startPos;

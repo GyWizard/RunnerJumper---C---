@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class Movement
+public sealed class Movement
 {
 
     private float _speed;

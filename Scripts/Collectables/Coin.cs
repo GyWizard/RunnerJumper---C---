@@ -2,7 +2,7 @@
 using UnityEngine;
 namespace RunnerJumper
 {
-    public class Coin : GoodBonus
+    public sealed class Coin : GoodBonus
     {
 
     }

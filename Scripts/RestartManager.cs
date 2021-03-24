@@ -1,7 +1,7 @@
 ﻿namespace RunnerJumper
 {
     using UnityEngine.SceneManagement;
-    public class RestartManager
+    public sealed class RestartManager
     {
         public void Restart()
         {

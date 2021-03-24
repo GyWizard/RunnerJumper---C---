@@ -2,7 +2,7 @@
 
 namespace RunnerJumper
 {
-    public class InputController
+    public sealed class InputController
     {
         public bool Action {get;set;}
  
