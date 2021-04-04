@@ -5,7 +5,6 @@ namespace RunnerJumper
     public sealed class InputController
     {
         public bool Action {get;set;}
- 
         public void CheckActionPressed() //  проверка на нажатие кнопки действия
         {
             #if UNITY_ANDROID //  для андройда
@@ -17,10 +16,7 @@ namespace RunnerJumper
                 Action=true;
             }
             #endif
-            
         }
-
-    }   
-    
+    }      
 }
 

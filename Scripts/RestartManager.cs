@@ -7,7 +7,7 @@
         {
             SceneManager.LoadScene( SceneManager.GetActiveScene().buildIndex); // Перезапускаем сцену
         }
-    }
 
+    }
 }
 

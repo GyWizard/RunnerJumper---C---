@@ -1,14 +1,25 @@
 ﻿
 using UnityEngine;
+using System;
 using static UnityEngine.Debug;
 
 namespace RunnerJumper
 {
 
-    public class GoodBonus : InteractiveObject,ICollect,IDisplay
+    public class GoodBonus : InteractiveObject,IDisplay
     {
+        protected Vector2 _startPos;
+        
+        public Vector2 StartPosition{set {_startPos = value;} }
+        public Action Collect;
 
-        public void Collect() //  Выключаем объект после соприкосновения
+        public GoodBonus()
+        {
+            Collect += Deactivate;
+            Collect += Display;
+        }
+
+        public void Deactivate() //  Выключаем объект после соприкосновения
         {
             gameObject.SetActive(false);
         }
@@ -20,8 +31,8 @@ namespace RunnerJumper
         protected override void Interact()
         {
             Collect();
-            Display();
         }
+
 
         
     }    
