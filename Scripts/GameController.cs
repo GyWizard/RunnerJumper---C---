@@ -65,6 +65,10 @@ namespace RunnerJumper
                     badBonus.Caught += EndGame;
                     badBonus.Caught += _audioManager.PlayEndAudio;
                 }
+                if(io is Exit exit)
+                {
+                    exit.EnterExit += WinGame;
+                }
             }
 
         }
@@ -102,6 +106,14 @@ namespace RunnerJumper
             Time.timeScale=0;
             _reference.RestartButton.GetComponent<UnityEngine.UI.Button>().onClick.AddListener( restartManager.Restart );
         }
+
+        void WinGame()
+        {
+            Instantiate(_reference.WinningText,_reference.Canvas.transform);
+            EndGame();
+        }
+
+
 
     }   
 }

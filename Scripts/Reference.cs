@@ -15,6 +15,7 @@ namespace RunnerJumper
         private AudioSource _audioSource;
 
         private GameObject _restartButton;
+        private GameObject _winningText;
 
         public Canvas Canvas
         {
@@ -88,6 +89,18 @@ namespace RunnerJumper
                 }
                 
                 return _restartButton;
+            }
+        }
+
+        public GameObject WinningText
+        {
+            get
+            {
+                if (_winningText == null)
+                {
+                    _winningText = Resources.Load<GameObject>("UI/WinningText");
+                }            
+                return _winningText;
             }
         }
 
