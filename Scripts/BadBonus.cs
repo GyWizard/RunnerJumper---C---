@@ -1,13 +1,16 @@
-﻿using System;
+using System;
 namespace RunnerJumper
 {
 public class BadBonus : InteractiveObject
 {
-    public Action Caught;
+    public event Action Caught;
     protected override  void Interact()
     {
         Caught();
     }
+
+
+    
 }   
 }
 

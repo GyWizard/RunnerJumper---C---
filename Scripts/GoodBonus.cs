@@ -19,6 +19,8 @@ namespace RunnerJumper
             Collect += Display;
         }
 
+        
+
         public void Deactivate() //  Выключаем объект после соприкосновения
         {
             gameObject.SetActive(false);
