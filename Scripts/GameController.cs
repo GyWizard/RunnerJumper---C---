@@ -67,17 +67,13 @@ namespace RunnerJumper
                 }
             }
 
-
-
-            
         }
 
         void CheckFields()
         {
-            if(!_reference.Player) { throw new Exception("Player is not signed");}
-            // if(!_endAudio) { throw new Exception("End sound is not signed");}
-            // if(!_collectAudio) { throw new Exception("Collect sound is not signed");}
-            // if(!_audioSource) { throw new Exception("Audio Source is not signed");}       
+            if(!_reference.Player) { throw new Exception("Player is not signed");}  
+            if(_jumpForce==0) { throw new Exception("Jump Force is 0");}   
+            if(_runSpeed==0) { throw new Exception("Run Speed is 0");}   
         }
 
         void DisplayScore()
@@ -95,27 +91,17 @@ namespace RunnerJumper
             _controllers.FixedExecute();
         }
 
-        void EndGame()
-        {
-            Time.timeScale=0;
-            _reference.RestartButton.GetComponent<UnityEngine.UI.Button>().onClick.AddListener( restartManager.Restart );
-        }
-
+      
         void LateUpdate () 
         {
             _controllers.LateExecute();
         }
 
-        // void InteractiveObjects() 
-        // {
-        //     foreach(InteractiveObject io in _listInteractiveObjects) // Пробегаем по интерактивным объектам
-        //     {
-        //         if(io is IExecute ex) 
-        //         {
-        //             ex.Execute();
-        //         }
-        //     }
-        // }
+        void EndGame()
+        {
+            Time.timeScale=0;
+            _reference.RestartButton.GetComponent<UnityEngine.UI.Button>().onClick.AddListener( restartManager.Restart );
+        }
 
     }   
 }
