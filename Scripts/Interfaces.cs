@@ -24,4 +24,22 @@
         void Interact();
     }
 
+    interface IExecute : IController
+    {
+        void Execute();
+    }
+     interface IExecuteFixed : IController
+    {
+        void FixedExecute();
+    }
+    interface IExecuteLate : IController
+    {
+        void LateExecute();
+    }
+
+    public interface IController
+    {
+
+    }
+
 }

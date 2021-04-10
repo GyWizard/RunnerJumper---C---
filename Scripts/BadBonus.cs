@@ -1,16 +1,16 @@
-﻿namespace RunnerJumper
+using System;
+namespace RunnerJumper
 {
 public class BadBonus : InteractiveObject
 {
-    private RestartManager restartManager = new RestartManager();
-    
-
-    // Start is called before the first frame update
+    public event Action Caught;
     protected override  void Interact()
     {
-        restartManager.Restart();
+        Caught();
     }
-}
+
+
     
+}   
 }
 

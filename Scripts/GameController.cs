@@ -1,70 +1,119 @@
 ﻿using UnityEngine;
-
+using System;
+using System.Collections.Generic;
 namespace RunnerJumper
 {
     internal sealed class GameController : MonoBehaviour
     {
         #region  SerializedFields
 
-        [SerializeField] private Rigidbody2D _player;
-        [SerializeField] private Transform _camera;
         [SerializeField] private float _jumpForce;
         [SerializeField] private float _runSpeed;
+ 
 
         #endregion
         
-
-        private InputController _controller;
+        private RestartManager restartManager = new RestartManager();
+        private InputController _inputController;
         private Movement _movement;
-        private CameraMove _cameraMove;
+        private CameraController _cameraMove;
         private InteractiveObject[] _listInteractiveObjects;
+
+        private Controllers _controllers;
+
+        private Reference _reference;
+
+        private AudioManager _audioManager;
 
         void Awake()
         {
-            _controller = new InputController(); // создаем менеджер Ввода
-            _movement = new Movement(_runSpeed,_jumpForce,_player); // создаем менеджер Движения игрока
-            _cameraMove = new CameraMove(_player.transform,_camera); //  создаем менеджер Движения камеры
+            Time.timeScale=1f;
+
+            _reference = new Reference();
+
+            CheckFields();
+
+            
+            _movement = new Movement(_runSpeed,_jumpForce, _reference.Player.GetComponent<Rigidbody2D>() );
+            _inputController = new InputController(_movement); // создаем менеджер Ввода
+            _cameraMove = new CameraController(_reference.Player.transform, _reference.Camera.transform); //  создаем менеджер Движения камеры
             _listInteractiveObjects = FindObjectsOfType<InteractiveObject>(); // добавляем все интерактивные объекты в массив
+            _audioManager = new AudioManager(GetComponent<AudioSource>() ,_reference.EndAudio,_reference.CollectAudio);
+            _controllers = new Controllers();
+
+            _controllers.AddController(_inputController);
+            _controllers.AddController(_cameraMove);
+
+            foreach(InteractiveObject io in _listInteractiveObjects) // Пробегаем по интерактивным объектам
+            {
+                if(io is IController controller)
+                {
+                    _controllers.AddController(controller);
+                }
+            }
+
+            foreach(InteractiveObject io in _listInteractiveObjects) // Пробегаем по интерактивным объектам
+            {
+                if(io is GoodBonus goodBonus)
+                {
+                    goodBonus.StartPosition = goodBonus.gameObject.transform.localPosition;
+                    goodBonus.Collect += _audioManager.PlayCollectAudio;;
+                }
+                if(io is BadBonus badBonus)
+                {
+                    badBonus.Caught += DisplayScore;
+                    badBonus.Caught += EndGame;
+                    badBonus.Caught += _audioManager.PlayEndAudio;
+                }
+                if(io is Exit exit)
+                {
+                    exit.EnterExit += WinGame;
+                }
+            }
+
         }
 
+        void CheckFields()
+        {
+            if(!_reference.Player) { throw new Exception("Player is not signed");}  
+            if(_jumpForce==0) { throw new Exception("Jump Force is 0");}   
+            if(_runSpeed==0) { throw new Exception("Run Speed is 0");}   
+        }
+
+        void DisplayScore()
+        {
+            Debug.Log("End of the game!");
+        }
 
         void Update()
         {
-            PlayerMovement(); // Перемещаем игрока
-            InteractiveObjects(); // Взаимодействия с интерактивными объектами
+            _controllers.Execute();
         }
 
         void FixedUpdate() 
         {
-            if(_controller.Action) //Если нажата кнопка действия совершаем прыжок
-            {
-                _movement.Jump();
-                _controller.Action = false;
-            }
+            _controllers.FixedExecute();
         }
 
+      
         void LateUpdate () 
         {
-            _cameraMove.Move(); // обновляем камеру
+            _controllers.LateExecute();
         }
 
-        void PlayerMovement() 
+        void EndGame()
         {
-            _movement.Run(); //выполняем бег с заданной скоростью
-            _controller.CheckActionPressed(); // проверяем кнопку прыжка
+            Time.timeScale=0;
+            _reference.RestartButton.GetComponent<UnityEngine.UI.Button>().onClick.AddListener( restartManager.Restart );
         }
 
-        void InteractiveObjects() 
+        void WinGame()
         {
-            foreach(InteractiveObject io in _listInteractiveObjects) // Пробегаем по интерактивным объектам
-            {
-                if(io is IFlay flay) 
-                {
-
-                    flay.Fly(); // Если есть интерфейс IFlay то летаем.
-                }
-            }
+            Instantiate(_reference.WinningText,_reference.Canvas.transform);
+            EndGame();
         }
+
+
 
     }   
 }
