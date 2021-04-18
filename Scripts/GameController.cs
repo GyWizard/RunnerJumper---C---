@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System;
-using System.Collections.Generic;
+using UnityEngine.UI;
 namespace RunnerJumper
 {
     internal sealed class GameController : MonoBehaviour
@@ -24,25 +24,41 @@ namespace RunnerJumper
         private Reference _reference;
 
         private AudioManager _audioManager;
+        private Radar _radar;
+
+        [SerializeField] Camera miniCamera;
 
         void Awake()
         {
+
+
             Time.timeScale=1f;
 
             _reference = new Reference();
 
             CheckFields();
 
-            
+            _radar = FindObjectOfType<Radar>();
+
+            Radar.RegisterRadarObject(_reference.Player,_reference.RadarGreen);
+
+            PhotoController _photoController = new PhotoController(miniCamera);
+
             _movement = new Movement(_runSpeed,_jumpForce, _reference.Player.GetComponent<Rigidbody2D>() );
             _inputController = new InputController(_movement); // создаем менеджер Ввода
             _cameraMove = new CameraController(_reference.Player.transform, _reference.Camera.transform); //  создаем менеджер Движения камеры
             _listInteractiveObjects = FindObjectsOfType<InteractiveObject>(); // добавляем все интерактивные объекты в массив
             _audioManager = new AudioManager(GetComponent<AudioSource>() ,_reference.EndAudio,_reference.CollectAudio);
+            
+            
+
             _controllers = new Controllers();
+
 
             _controllers.AddController(_inputController);
             _controllers.AddController(_cameraMove);
+            _controllers.AddController(new RadarController(_radar,Camera.main.transform,10f));
+            //_controllers.AddController(new PhotoController(miniCamera));
 
             foreach(InteractiveObject io in _listInteractiveObjects) // Пробегаем по интерактивным объектам
             {
@@ -50,25 +66,28 @@ namespace RunnerJumper
                 {
                     _controllers.AddController(controller);
                 }
-            }
 
-            foreach(InteractiveObject io in _listInteractiveObjects) // Пробегаем по интерактивным объектам
-            {
                 if(io is GoodBonus goodBonus)
                 {
                     goodBonus.StartPosition = goodBonus.gameObject.transform.localPosition;
-                    goodBonus.Collect += _audioManager.PlayCollectAudio;;
+                    goodBonus.Collect += _audioManager.PlayCollectAudio;
+                    Radar.RegisterRadarObject(io.gameObject, _reference.RadarYellow);
                 }
                 if(io is BadBonus badBonus)
                 {
                     badBonus.Caught += DisplayScore;
                     badBonus.Caught += EndGame;
                     badBonus.Caught += _audioManager.PlayEndAudio;
+                    badBonus.Caught += Radar.ClearDots;
+                    Radar.RegisterRadarObject(io.gameObject,_reference.RadarRed);
                 }
                 if(io is Exit exit)
                 {
                     exit.EnterExit += WinGame;
+                    exit.EnterExit += Radar.ClearDots;
                 }
+
+                
             }
 
         }

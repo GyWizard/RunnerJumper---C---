@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.UI;
 
 namespace RunnerJumper
 {
@@ -15,6 +14,9 @@ namespace RunnerJumper
         private AudioSource _audioSource;
 
         private GameObject _restartButton;
+        private Image _radarRed;
+        private Image _radarYellow;
+        private Image _radarGreen;
         private GameObject _winningText;
 
         public Canvas Canvas
@@ -89,6 +91,41 @@ namespace RunnerJumper
                 }
                 
                 return _restartButton;
+            }
+        }
+
+        public Image RadarRed
+        {
+            get
+            {
+                if (_radarRed == null)
+                {
+                    _radarRed = Resources.Load<Image>("UI/RadarRed");
+                }              
+                return _radarRed;
+            }
+        }
+        public Image RadarYellow
+        {
+            get
+            {
+                if (_radarYellow == null)
+                {
+                    _radarYellow = Resources.Load<Image>("UI/RadarYellow");
+                }            
+                return _radarYellow;
+            }
+        }
+        public Image RadarGreen
+        {
+            get
+            {
+                if (_radarGreen == null)
+                {
+                    _radarGreen = Resources.Load<Image>("UI/RadarGreen");
+                }
+                
+                return _radarGreen;
             }
         }
 

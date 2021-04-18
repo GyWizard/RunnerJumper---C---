@@ -24,6 +24,7 @@ namespace RunnerJumper
         public void Deactivate() //  Выключаем объект после соприкосновения
         {
             gameObject.SetActive(false);
+            Radar.RemoveRadarObject(this.gameObject);
         }
         public void Display() //  Выводим имя объекта в консоль
         {
